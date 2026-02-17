@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المساعد القانوني السعودي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4 font-sans">
+    <div class="w-full max-w-xl bg-slate-800 p-8 rounded-3xl shadow-2xl border border-slate-700">
+        <h1 class="text-3xl font-bold text-amber-500 mb-6 text-center">المساعد القانوني الذكي</h1>
+        <div class="space-y-4">
+            <label class="block text-sm text-slate-400">اكتب تفاصيل قضيتك أو استفسارك القانوني:</label>
+            <textarea id="caseText" class="w-full bg-slate-700 rounded-xl p-4 text-white h-32 outline-none focus:ring-2 focus:ring-amber-500 border border-slate-600" placeholder="مثال: أريد صياغة لائحة دعوى مطالبة بمستحقات مالية..."></textarea>
+            <button onclick="processCase()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 rounded-xl transition-all shadow-lg shadow-amber-500/20">توليد النص القانوني</button>
+            <div id="result" class="hidden mt-4 p-4 bg-slate-900 rounded-xl border border-amber-500/30 text-amber-100 italic leading-relaxed"></div>
+        </div>
+    </div>
+    <script>
+        function processCase() {
+            const text = document.getElementById('caseText').value;
+            const res = document.getElementById('result');
+            if(text) {
+                res.classList.remove('hidden');
+                res.innerHTML = "<b>المقترح القانوني:</b><br>بناءً على الوقائع المذكورة، نوصي بصياغة المستند استناداً للمادة الأولى من نظام المرافات الشرعية، مع التركيز على إرفاق كافة البينات المتاحة.";
+            }
+        }
+    </script>
+</body>
+</html>
