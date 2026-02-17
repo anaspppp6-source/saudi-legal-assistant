@@ -3,27 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المساعد القانوني السعودي</title>
+    <title>المساعد القانوني السعودي المطور</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; }
+        @media print { .no-print { display: none; } }
+    </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4 font-sans">
-    <div class="w-full max-w-xl bg-slate-800 p-8 rounded-3xl shadow-2xl border border-slate-700">
-        <h1 class="text-3xl font-bold text-amber-500 mb-6 text-center">المساعد القانوني الذكي</h1>
-        <div class="space-y-4">
-            <label class="block text-sm text-slate-400">اكتب تفاصيل قضيتك أو استفسارك القانوني:</label>
-            <textarea id="caseText" class="w-full bg-slate-700 rounded-xl p-4 text-white h-32 outline-none focus:ring-2 focus:ring-amber-500 border border-slate-600" placeholder="مثال: أريد صياغة لائحة دعوى مطالبة بمستحقات مالية..."></textarea>
-            <button onclick="processCase()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 rounded-xl transition-all shadow-lg shadow-amber-500/20">توليد النص القانوني</button>
-            <div id="result" class="hidden mt-4 p-4 bg-slate-900 rounded-xl border border-amber-500/30 text-amber-100 italic leading-relaxed"></div>
+<body class="bg-slate-900 text-white min-h-screen p-4 md:p-10">
+    <div class="max-w-4xl mx-auto space-y-8">
+        
+        <div class="text-center space-y-2">
+            <h1 class="text-4xl font-bold text-amber-500 tracking-tight">المساعد القانوني الذكي</h1>
+            <p class="text-slate-400">بوابة صياغة الوثائق القانونية وفق الأنظمة السعودية</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-1 bg-slate-800 p-6 rounded-3xl border border-slate-700 space-y-6 no-print">
+                <div>
+                    <label class="block text-sm font-medium mb-3 text-amber-200">تصنيف الدعوى</label>
+                    <div class="grid grid-cols-1 gap-2">
+                        <button onclick="setType('عمالية')" class="type-btn bg-slate-700 hover:bg-amber-500/20 p-3 rounded-xl text-right border border-slate-600 transition-all">⚖️ قضايا عمالية</button>
+                        <button onclick="setType('تجارية')" class="type-btn bg-slate-700 hover:bg-amber-500/20 p-3 rounded-xl text-right border border-slate-600 transition-all">💼 قضايا تجارية</button>
+                        <button onclick="setType('أحوال شخصية')" class="type-btn bg-slate-700 hover:bg-amber-500/20 p-3 rounded-xl text-right border border-slate-600 transition-all">🏠 أحوال شخصية</button>
+                        <button onclick="setType('عامة')" class="type-btn bg-slate-700 hover:bg-amber-500/20 p-3 rounded-xl text-right border border-slate-600 transition-all">📝 مطالبات عامة</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-2xl">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span id="selectedLabel" class="text-amber-500 font-bold">يرجى اختيار نوع القضية</span>
+                        <span class="text-xs text-slate-500">الحالة: جاهز</span>
+                    </div>
+                    
+                    <textarea id="caseDetails" class="w-full bg-slate-900 rounded-2xl p-4 text-white h-48 outline-none focus:ring-2 focus:ring-amber-500 border border-slate-700 transition-all" placeholder="اشرح الوقائع هنا بالتفصيل (مثلاً: أطالب برواتب متأخرة لمدة 3 أشهر)..."></textarea>
+                    
+                    <div class="flex gap-3 no-print">
+                        <button onclick="generateLegalText()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-amber-500/20 transition-all">توليد الصياغة القانونية</button>
+                        <button onclick="window.print()" class="bg-slate-700 hover:bg-slate-600 p-4 rounded-xl border border-slate-600">🖨️</button>
+                    </div>
+
+                    <div id="outputCard" class="hidden mt-6 bg-slate-900 rounded-2xl border border-amber-500/30 overflow-hidden transition-all">
+                        <div class="bg-amber-500/10 px-4 py-2 border-b border-amber-500/30 flex justify-between items-center">
+                            <span class="text-amber-500 text-sm font-bold">النص القانوني المقترح</span>
+                            <button onclick="copyText()" class="text-xs bg-amber-500 text-slate-900 px-2 py-1 rounded hover:bg-amber-400">نسخ النص</button>
+                        </div>
+                        <div id="legalResult" class="p-6 text-slate-200 leading-relaxed whitespace-pre-wrap text-lg"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
     <script>
-        function processCase() {
-            const text = document.getElementById('caseText').value;
-            const res = document.getElementById('result');
-            if(text) {
-                res.classList.remove('hidden');
-                res.innerHTML = "<b>المقترح القانوني:</b><br>بناءً على الوقائع المذكورة، نوصي بصياغة المستند استناداً للمادة الأولى من نظام المرافات الشرعية، مع التركيز على إرفاق كافة البينات المتاحة.";
-            }
+        let currentType = "";
+
+        function setType(type) {
+            currentType = type;
+            document.getElementById('selectedLabel').innerText = "نوع القضية الحالي: " + type;
+            // تمييز الزر المختار
+            document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('border-amber-500', 'bg-amber-500/10'));
+            event.currentTarget.classList.add('border-amber-500', 'bg-amber-500/10');
+        }
+
+        function generateLegalText() {
+            const details = document.getElementById('caseDetails').value;
+            const output = document.getElementById('outputCard');
+            const result = document.getElementById('legalResult');
+
+            if(!currentType) { alert("يرجى اختيار نوع القضية أولاً من القائمة الجانبية"); return; }
+            if(!details) { alert("يرجى كتابة تفاصيل القضية"); return; }
+
+            output.classList.remove('hidden');
+            
+            let legalText = `صاحب الفضيلة رئيس الدائرة ${currentType} المحترم\nالسلام عليكم ورحمة الله وبركاته،،\n\nأتقدم لفضيلتكم بهذه الدعوى ضد المدعى عليه، حيث أن الوقائع تتلخص في: (${details}).\n\nوبناءً عليه، وحيث أن المادة (..) من نظام ${currentType == 'عمالية' ? 'العمل' : 'المرافعات الشرعية'} كفلت حق المطالبة، فإنني أطلب من فضيلتكم الحكم لي بطلباتي أعلاه.\n\nوالله يحفظكم ويرعاكم.`;
+            
+            result.innerText = legalText;
+        }
+
+        function copyText() {
+            const text = document.getElementById('legalResult').innerText;
+            navigator.clipboard.writeText(text);
+            alert("تم نسخ النص بنجاح!");
         }
     </script>
 </body>
