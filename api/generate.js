@@ -1,12 +1,14 @@
 export default async function handler(req, res) {
-    // التأكد أن الطلب القادم هو POST
+    // 1. التأكد من نوع الطلب
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { prompt } = req.body;
-
     try {
+        // 2. الحصول على البيانات (تعديل مفصلي هنا)
+        const { prompt } = req.body;
+
+        // 3. الاتصال بـ Claude
         const response = await fetch('https://api.anthropic.com/v1/messages', {
             method: 'POST',
             headers: {
@@ -17,18 +19,21 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: 'claude-3-haiku-20240307',
                 max_tokens: 1500,
-                messages: [{ role: 'user', content: `أنت محامي سعودي خبير بالأنظمة القضائية. صغ لي مذكرة قانونية رصينة بناءً على الوقائع التالية: ${prompt}` }],
+                messages: [{ role: 'user', content: `أنت محامي سعودي خبير. صغ لي مذكرة قانونية رصينة بناءً على الوقائع التالية: ${prompt}` }],
             }),
         });
 
         const data = await response.json();
 
-        if (data.error) {
-            return res.status(500).json({ error: data.error.message });
+        // 4. إرسال النتيجة للمتصفح
+        if (data.content && data.content[0]) {
+            res.status(200).json({ result: data.content[0].text });
+        } else {
+            console.error('Claude API Error:', data);
+            res.status(500).json({ result: "عذراً، المحرك لم يرد بشكل صحيح. تأكد من الرصيد والمفتاح." });
         }
-
-        res.status(200).json({ result: data.content[0].text });
     } catch (error) {
-        res.status(500).json({ error: 'خطأ في الاتصال بخادم الذكاء الاصطناعي' });
+        console.error('Server Error:', error);
+        res.status(500).json({ result: "حدث خطأ داخلي في الاتصال." });
     }
 }
