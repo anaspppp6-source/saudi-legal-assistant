@@ -10,27 +10,27 @@
         body { font-family: 'Tajawal', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); }
         h1 { color: var(--primary); text-align: center; font-family: 'Amiri', serif; font-size: 2.5em; margin-bottom: 10px; }
-        textarea { width: 100%; height: 180px; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; font-family: 'Tajawal'; box-sizing: border-box; resize: none; }
+        textarea { width: 100%; height: 180px; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; font-family: 'Tajawal'; box-sizing: border-box; resize: none; outline-color: var(--gold); }
         .button-group { display: flex; gap: 10px; margin-top: 20px; }
         button { flex: 2; background: var(--primary); color: white; padding: 15px; border: none; border-radius: 10px; font-size: 18px; cursor: pointer; transition: 0.3s; font-weight: bold; }
         .btn-download { flex: 1; background: var(--gold); display: none; }
         button:hover { opacity: 0.9; transform: translateY(-2px); }
         #result { margin-top: 30px; padding: 30px; background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; white-space: pre-wrap; font-family: 'Amiri', serif; font-size: 1.3em; line-height: 2; color: #222; display: none; }
-        
-        /* قسم النصائح الجديد */
-        .tips-section { margin-top: 40px; padding: 20px; background: #fdf9f0; border-right: 5px solid var(--gold); border-radius: 5px; }
-        .tips-section h3 { color: var(--primary); margin-top: 0; }
-        .tips-section ul { padding-right: 20px; line-height: 1.8; color: #444; }
-        
         .loading { text-align: center; display: none; color: var(--gold); font-weight: bold; margin-top: 15px; }
+        
+        /* قسم النصائح المطور */
+        .tips-section { margin-top: 40px; padding: 25px; background: #fdf9f0; border-right: 5px solid var(--gold); border-radius: 8px; }
+        .tips-section h3 { color: var(--primary); margin-top: 0; font-family: 'Amiri', serif; font-size: 1.5em; }
+        .tips-section ul { padding-right: 20px; line-height: 1.8; color: #444; }
+        .tips-section li { margin-bottom: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>⚖️ المساعد القانوني السعودي ⚖️</h1>
-        <p style="text-align: center; color: #666;">حوّل وقائع قضيتك إلى مذكرة قانونية رصينة جاهزة لمنصة ناجز</p>
+        <p style="text-align: center; color: #666;">حوّل وقائع قضيتك (عمالية، أسرية، مدنية) إلى مذكرة رصينة لمنصة ناجز</p>
         
-        <textarea id="prompt" placeholder="اكتب وقائع القضية بالتفصيل هنا..." ></textarea>
+        <textarea id="prompt" placeholder="اكتب وقائع القضية بالتفصيل هنا (مثال: أرغب بفسخ النكاح بسبب الضرر... أو: تم فصلي من عملي...)" ></textarea>
         
         <div class="button-group">
             <button onclick="generate()">توليد المذكرة القانونية (AI)</button>
@@ -43,10 +43,11 @@
         <div class="tips-section">
             <h3>💡 إرشادات هامة عند التقديم في "ناجز":</h3>
             <ul>
-                <li><strong>المرفقات الضرورية:</strong> تأكد من إرفاق (عقد العمل، برنت التأمينات، إشعار الفصل) كبينات مؤيدة لمذكرتك.</li>
-                <li><strong>تحرير البيانات:</strong> راجع المذكرة وقم بتعبئة أي معلومات بين أقواس مثل (تاريخ الفصل) أو (اسم المنشأة).</li>
-                <li><strong>الطلبات الختامية:</strong> تأكد أن المذكرة تنتهي بطلبات واضحة (مثل تعويض المادة 77 أو صرف الأجور المتأخرة).</li>
-                <li><strong>تعدد الردود:</strong> يمكنك استخدام هذه المذكرة في خانة "موضوع الدعوى" أو كـ "مذكرة دفاع" أثناء الجلسات.</li>
+                <li><strong>للقضايا العمالية:</strong> أرفق (عقد العمل، برنت التأمينات، إشعار الفصل) كبينات مؤيدة لمذكرتك.</li>
+                <li><strong>لقضايا الأحوال الشخصية (خلع/نفقة):</strong> أرفق (عقد النكاح، صكوك المواليد، وما يثبت الضرر أو الحالة المادية).</li>
+                <li><strong>تحرير البيانات:</strong> الذكاء الاصطناعي يضع هيكلاً استرشادياً؛ تأكد من تعبئة الأسماء والتواريخ الشخصية بدقة.</li>
+                <li><strong>الطلبات الختامية:</strong> راجع قسم "الطلبات" في نهاية المذكرة وتأكد أنها تعبر عن كامل حقوقك التي تريدها من القاضي.</li>
+                <li><strong>جاهزية الملف:</strong> استخدم زر "حفظ PDF" لرفع المذكرة مباشرة كملف مستقل في قسم المرفقات بناجز لضمان مظهر احترافي.</li>
             </ul>
         </div>
     </div>
