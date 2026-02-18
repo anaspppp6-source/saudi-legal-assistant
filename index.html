@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المساعد القانوني السعودي | منصة الخبير</title>
+    <title>المستشار القانوني السعودي | منصة الخبير</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* تنسيق فائق: ألوان مستوحاة من الهوية البصرية الحكومية الحديثة */
         :root { 
-            --primary: #122c34; /* كحلي ملكي */
-            --gold: #ad8b3a;    /* ذهبي مطفي */
-            --bg: #f4f7f6;      /* رمادي فاتح جداً */
-            --accent: #2c5e5e;  /* أخضر زمردي غامق */
+            --primary: #122c34; 
+            --gold: #ad8b3a;    
+            --bg: #f4f7f6;      
         }
 
         body { 
             font-family: 'Tajawal', sans-serif; 
             background-color: var(--bg); 
             margin: 0; 
-            padding: 40px 20px; 
+            padding: 20px; /* تقليل الحشو ليتناسب مع الجوال */
             color: #333; 
         }
 
@@ -27,174 +25,128 @@
             max-width: 900px; 
             margin: auto; 
             background: #ffffff; 
-            padding: 50px; 
+            padding: 30px; /* حشو مرن */
             border-radius: 12px; 
             box-shadow: 0 4px 25px rgba(0,0,0,0.08); 
             border-top: 8px solid var(--primary); 
-            position: relative;
         }
 
-        /* تنسيق العنوان بطريقة الشركات الكبرى */
-        .header-section { text-align: center; margin-bottom: 40px; }
         h1 { 
             color: var(--primary); 
             font-family: 'Amiri', serif; 
-            font-size: 2.8em; 
+            font-size: 2.2em; /* حجم خط متكيف */
             margin: 0; 
-            letter-spacing: -1px;
+            text-align: center;
         }
+
         .subtitle { 
             color: var(--gold); 
             font-weight: 700; 
-            font-size: 1.1em; 
+            font-size: 1em; 
             margin-top: 10px; 
-            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        /* حقل النص */
         textarea { 
             width: 100%; 
-            height: 220px; 
-            padding: 20px; 
+            height: 200px; 
+            padding: 15px; 
             border: 1px solid #d1d5db; 
             border-radius: 8px; 
-            font-size: 17px; 
+            font-size: 16px; 
             font-family: 'Tajawal'; 
             box-sizing: border-box; 
-            transition: all 0.3s ease; 
             background: #fafafa; 
-            line-height: 1.8;
-        }
-        textarea:focus { 
-            border-color: var(--primary); 
-            outline: none; 
-            background: #fff; 
-            box-shadow: 0 0 0 4px rgba(18, 44, 52, 0.05); 
         }
 
-        /* مجموعة الأزرار */
-        .button-group { display: flex; gap: 15px; margin-top: 30px; }
+        /* جعل الأزرار مرنة: بجانب بعض في الماك، وتحت بعض في الجوال */
+        .button-group { 
+            display: flex; 
+            flex-wrap: wrap; /* يسمح بالنزول لسطر جديد */
+            gap: 10px; 
+            margin-top: 25px; 
+        }
         
         button { 
-            flex: 2; 
+            flex: 1 1 200px; /* يتمدد ليملأ المساحة */
             background: var(--primary); 
             color: white; 
-            padding: 18px; 
+            padding: 16px; 
             border: none; 
             border-radius: 6px; 
-            font-size: 18px; 
+            font-size: 17px; 
             cursor: pointer; 
-            transition: 0.3s; 
             font-weight: bold; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            gap: 12px; 
+            gap: 10px; 
         }
 
-        .btn-download { 
-            flex: 1; 
-            background: var(--gold); 
-            display: none; 
-        }
-
-        button:hover { 
-            filter: brightness(1.2); 
-            transform: translateY(-2px); 
-        }
+        .btn-download { background: var(--gold); display: none; }
 
         /* أيقونة المطرقة المتحركة */
-        .loading-container { 
-            display: none; 
-            text-align: center; 
-            margin-top: 30px; 
-            padding: 20px;
-        }
-        .gavel-icon { 
-            font-size: 50px; 
-            color: var(--gold); 
-            animation: hammer 0.8s infinite ease-in-out alternate; 
-        }
-        @keyframes hammer {
-            0% { transform: rotate(-20deg); }
-            100% { transform: rotate(40deg); }
-        }
-        .loading-text { 
-            color: var(--primary); 
-            font-weight: bold; 
-            margin-top: 15px; 
-            font-size: 1.1em; 
-        }
+        .loading-container { display: none; text-align: center; margin-top: 25px; }
+        .gavel-icon { font-size: 40px; color: var(--gold); animation: hammer 0.8s infinite ease-in-out alternate; }
+        @keyframes hammer { 0% { transform: rotate(-20deg); } 100% { transform: rotate(40deg); } }
 
-        /* النتيجة النهائية */
         #result { 
-            margin-top: 40px; 
-            padding: 40px; 
+            margin-top: 30px; 
+            padding: 20px; 
             background: #fff; 
-            border: 1px solid #eee; 
-            border-right: 6px solid var(--gold); 
+            border-right: 5px solid var(--gold); 
             border-radius: 4px; 
             white-space: pre-wrap; 
             font-family: 'Amiri', serif; 
-            font-size: 1.4em; 
-            line-height: 2.2; 
-            color: #1a1a1a; 
+            font-size: 1.3em; 
+            line-height: 1.8; 
             display: none; 
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+            overflow-x: auto; /* يمنع خروج النص في الجوال */
         }
 
-        /* إرشادات ناجز المنسقة */
+        /* تحسينات للشاشات الصغيرة (الجوال) */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 20px; }
+            h1 { font-size: 1.8em; }
+            button { font-size: 16px; padding: 14px; }
+        }
+
         .tips-section { 
-            margin-top: 50px; 
-            padding: 30px; 
+            margin-top: 40px; 
+            padding: 20px; 
             background: #f9fafb; 
             border-radius: 8px; 
-            border-left: 4px solid var(--primary); 
+            font-size: 0.9em;
         }
-        .tips-section h3 { 
-            color: var(--primary); 
-            margin-top: 0; 
-            font-size: 1.4em; 
-            border-bottom: 1px solid #ddd; 
-            padding-bottom: 10px; 
-        }
-        .tips-section ul { padding-right: 20px; }
-        .tips-section li { margin-bottom: 12px; color: #4b5563; }
-
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header-section">
-            <h1>⚖️ المستشار القانوني السعودي</h1>
-            <div class="subtitle">نظام الصياغة الاستراتيجية المتقدم</div>
-        </div>
+        <h1>⚖️ المستشار القانوني السعودي</h1>
+        <div class="subtitle">نظام الصياغة الاستراتيجية المتقدم</div>
         
-        <textarea id="prompt" placeholder="ادخل تفاصيل القضية ليتم تحليلها وتكييفها نظامياً..."></textarea>
+        <textarea id="prompt" placeholder="اشرح تفاصيل قضيتك هنا..."></textarea>
         
         <div class="button-group">
-            <button onclick="generate()">
-                <i class="fas fa-magic"></i> توليد المذكرة الاستراتيجية
-            </button>
-            <button id="downloadBtn" class="btn-download" onclick="printMemo()">
-                <i class="fas fa-file-pdf"></i> حفظ كملف PDF
-            </button>
+            <button onclick="generate()"><i class="fas fa-magic"></i> توليد المذكرة</button>
+            <button id="downloadBtn" class="btn-download" onclick="printMemo()"><i class="fas fa-file-pdf"></i> حفظ PDF</button>
         </div>
         
         <div id="loader" class="loading-container">
             <i class="fas fa-gavel gavel-icon"></i>
-            <div class="loading-text">جاري استحضار الأسانيد النظامية وتكييف الدعوى...</div>
+            <div style="margin-top:10px; font-weight:bold;">جاري معالجة الوقائع...</div>
         </div>
 
         <div id="result"></div>
 
         <div class="tips-section">
-            <h3>💡 إرشادات الاستخدام الرسمي (ناجز)</h3>
-            <ul>
-                <li><strong>التكييف القانوني:</strong> المذكرة مبنية على الأنظمة السعودية الحديثة؛ تأكد من تعبئة تواريخ الوقائع بدقة.</li>
-                <li><strong>الطلبات الختامية:</strong> راجع الطلبات في نهاية المذكرة لضمان شمولها لكافة مستحقاتك.</li>
-                <li><strong>المرفقات الفنية:</strong> استخدم خيار حفظ PDF لتقديم ملف منسق واحترافي للدائرة القضائية.</li>
+            <h3 style="margin-top:0; color:var(--primary);">💡 إرشادات سريعة</h3>
+            <ul style="padding-right:20px; color:#555;">
+                <li>راجع البيانات بين الأقواس قبل تقديمها.</li>
+                <li>استخدم خيار PDF للحصول على تنسيق رسمي.</li>
             </ul>
         </div>
     </div>
@@ -206,8 +158,7 @@
             const loader = document.getElementById('loader');
             const downloadBtn = document.getElementById('downloadBtn');
 
-            if(!prompt) return alert("يرجى وصف القضية أولاً.");
-
+            if(!prompt) return alert("يرجى كتابة الوقائع.");
             loader.style.display = "block";
             resultDiv.style.display = "none";
             downloadBtn.style.display = "none";
@@ -221,9 +172,9 @@
                 const data = await response.json();
                 resultDiv.innerText = data.result;
                 resultDiv.style.display = "block";
-                downloadBtn.style.display = "block";
+                downloadBtn.style.display = "flex";
             } catch (e) {
-                alert("تعذر الاتصال بالخادم الذكي.");
+                alert("خطأ في الاتصال.");
             } finally {
                 loader.style.display = "none";
             }
@@ -235,19 +186,16 @@
             printWindow.document.write(`
                 <html>
                     <head>
-                        <title>مذكرة قضائية - نظام الخبير</title>
+                        <title>مذكرة قضائية</title>
                         <style>
                             @import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
-                            body { font-family: 'Amiri', serif; direction: rtl; padding: 60px; line-height: 2.2; font-size: 15pt; }
-                            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 40px; }
+                            body { font-family: 'Amiri', serif; direction: rtl; padding: 40px; line-height: 2; font-size: 14pt; }
+                            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 30px; }
                             .content { white-space: pre-wrap; text-align: justify; }
                         </style>
                     </head>
                     <body>
-                        <div class="header">
-                            <h2>المملكة العربية السعودية</h2>
-                            <h3>مذكرة دعوى / دفاع</h3>
-                        </div>
+                        <div class="header"><h2>المملكة العربية السعودية</h2><h3>مذكرة دعوى</h3></div>
                         <div class="content">${text}</div>
                     </body>
                 </html>
