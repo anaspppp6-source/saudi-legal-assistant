@@ -3,112 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة المساعد القانوني السعودي الذكي</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <title>المستشار القانوني الذكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Tajawal', sans-serif; background: #0f172a; scroll-behavior: smooth; }
-        .glass-effect { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gold-gradient { background: linear-gradient(135deg, #d4af37 0%, #f1c40f 100%); }
-        .text-gold { color: #d4af37; }
-        .active-category { border: 2px solid #d4af37 !important; background: rgba(212, 175, 55, 0.1) !important; color: #d4af37 !important; }
-        @media print { .no-print { display: none; } body { background: white; color: black; } }
+        :root {
+            --primary: #1a2a40; /* كحلي ملكي */
+            --gold: #c5a059;    /* ذهبي مطفي */
+            --bg: #f4f7f6;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg);
+            margin: 0; padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 8px solid var(--primary);
+        }
+        h1 { color: var(--primary); text-align: center; font-family: 'Amiri', serif; font-size: 2.5em; }
+        textarea {
+            width: 100%; height: 200px; padding: 15px;
+            border: 2px solid #ddd; border-radius: 10px;
+            font-size: 16px; font-family: 'Tajawal'; box-sizing: border-box;
+        }
+        button {
+            width: 100%; background: var(--primary); color: white;
+            padding: 15px; border: none; border-radius: 10px;
+            font-size: 18px; cursor: pointer; margin-top: 20px;
+            transition: 0.3s; font-weight: bold;
+        }
+        button:hover { background: var(--gold); }
+        #result {
+            margin-top: 30px; padding: 25px;
+            background: #fff; border: 1px solid #c5a059;
+            border-radius: 10px; white-space: pre-wrap;
+            font-family: 'Amiri', serif; font-size: 1.2em; line-height: 1.8;
+            color: #333; display: none;
+        }
+        .loading { text-align: center; display: none; color: var(--gold); font-weight: bold; }
     </style>
 </head>
-<body class="text-slate-200">
-
-    <nav class="no-print border-b border-white/10 p-4 glass-effect sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 gold-gradient rounded-xl flex items-center justify-center text-slate-900 shadow-lg">⚖️</div>
-                <span class="text-xl font-extrabold tracking-tight underline decoration-[#d4af37]">المساعد القانوني <span class="text-gold">الذكي</span></span>
-            </div>
-            <div class="text-[10px] text-slate-500 uppercase tracking-widest">Powered by Claude 3.5 Sonnet</div>
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto p-6 lg:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
+<body>
+    <div class="container">
+        <h1>⚖️ المساعد القانوني السعودي</h1>
+        <p style="text-align: center; color: #666;">اكتب وقائع قضيتك بالأسفل لتحويلها إلى مذكرة قانونية جاهزة لناجز</p>
         
-        <aside class="lg:col-span-4 space-y-6 no-print">
-            <div class="glass-effect p-8 rounded-[2rem] border-gold shadow-2xl">
-                <h2 class="text-gold font-bold text-lg mb-6 flex items-center gap-2">اختصاص القضية</h2>
-                <div class="grid grid-cols-1 gap-3">
-                    <button onclick="selectType('عمالية', this)" class="cat-btn w-full text-right p-4 rounded-2xl glass-effect border border-white/5 hover:border-gold transition-all">⚖️ القضاء العمالي</button>
-                    <button onclick="selectType('تجارية', this)" class="cat-btn w-full text-right p-4 rounded-2xl glass-effect border border-white/5 hover:border-gold transition-all">💼 القضاء التجاري</button>
-                    <button onclick="selectType('أحوال شخصية', this)" class="cat-btn w-full text-right p-4 rounded-2xl glass-effect border border-white/5 hover:border-gold transition-all">🏠 الأحوال الشخصية</button>
-                    <button onclick="selectType('عامة/حقوقية', this)" class="cat-btn w-full text-right p-4 rounded-2xl glass-effect border border-white/5 hover:border-gold transition-all">📜 المحاكم العامة</button>
-                </div>
-            </div>
-        </aside>
-
-        <section class="lg:col-span-8 space-y-8">
-            <div class="glass-effect p-8 rounded-[2rem] shadow-2xl relative">
-                <textarea id="caseInput" 
-                    class="w-full bg-slate-900/50 rounded-3xl p-6 text-lg text-white border border-white/10 outline-none focus:border-gold transition-all h-64 resize-none"
-                    placeholder="اكتب وقائع قضيتك هنا بالتفصيل لكي يصيغها الذكاء الاصطناعي..."></textarea>
-
-                <div class="mt-6 flex gap-4 no-print">
-                    <button onclick="generateLegalText()" id="submitBtn" class="flex-1 gold-gradient text-slate-900 font-extrabold py-5 rounded-2xl shadow-xl hover:scale-[1.01] transition-all text-lg">
-                        توليد المذكرة القانونية (AI)
-                    </button>
-                    <button onclick="window.print()" class="bg-white/5 px-8 rounded-2xl border border-white/10 transition-all">🖨️</button>
-                </div>
-            </div>
-
-            <div id="resultCard" class="hidden glass-effect rounded-[2rem] border-gold overflow-hidden transition-all duration-500">
-                <div class="bg-gold/10 p-4 border-b border-gold/20 flex justify-between items-center no-print">
-                    <span class="text-gold font-bold text-sm italic">تم التوليد فورياً بواسطة الذكاء الاصطناعي</span>
-                    <button onclick="copyDoc()" class="text-xs bg-gold text-slate-900 px-4 py-2 rounded-full font-bold">نسخ النص</button>
-                </div>
-                <div id="docContent" class="p-10 text-slate-100 text-lg leading-[2.2] text-justify whitespace-pre-wrap font-light italic text-gray-300">
-                    </div>
-            </div>
-        </section>
-    </main>
+        <textarea id="prompt" placeholder="مثال: تم فصلي من الشركة بتاريخ .. بدون توجيه إنذار مسبق وكان راتبي .." ></textarea>
+        
+        <button onclick="generate()">توليد المذكرة القانونية (AI)</button>
+        
+        <div id="loader" class="loading">⏳ جاري صياغة المذكرة بأيدي خيرة الخبراء...</div>
+        <div id="result"></div>
+    </div>
 
     <script>
-        let selectedType = "";
+        async function generate() {
+            const prompt = document.getElementById('prompt').value;
+            const resultDiv = document.getElementById('result');
+            const loader = document.getElementById('loader');
 
-        function selectType(type, btn) {
-            selectedType = type;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active-category'));
-            btn.classList.add('active-category');
-        }
+            if(!prompt) return alert("الرجاء كتابة تفاصيل القضية");
 
-        async function generateLegalText() {
-            const input = document.getElementById('caseInput').value;
-            const content = document.getElementById('docContent');
-            const card = document.getElementById('resultCard');
-            const btn = document.getElementById('submitBtn');
-
-            if(!selectedType) return alert("اختر نوع القضية أولاً من القائمة الجانبية");
-            if(!input) return alert("اكتب تفاصيل القضية أولاً");
-
-            btn.disabled = true;
-            btn.innerText = "جاري الاتصال بـ Claude AI...";
-            card.classList.remove('hidden');
-            content.innerText = "جاري التحليل والصياغة القانونية... فضلاً انتظر ثوانٍ";
+            loader.style.display = "block";
+            resultDiv.style.display = "none";
 
             try {
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: `نوع القضية: ${selectedType}. الوقائع: ${input}` }),
+                    body: JSON.stringify({ prompt })
                 });
-
                 const data = await response.json();
-                content.innerText = data.result || "حدث خطأ في النظام.";
-            } catch (error) {
-                content.innerText = "خطأ في الاتصال. تأكد من إضافة المفتاح السري في إعدادات Vercel.";
+                resultDiv.innerText = data.result;
+                resultDiv.style.display = "block";
+            } catch (e) {
+                alert("حدث خطأ في النظام");
             } finally {
-                btn.disabled = false;
-                btn.innerText = "توليد المذكرة القانونية (AI)";
+                loader.style.display = "none";
             }
-        }
-
-        function copyDoc() {
-            navigator.clipboard.writeText(document.getElementById('docContent').innerText);
-            alert("تم نسخ النص!");
         }
     </script>
 </body>
